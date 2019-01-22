@@ -1,0 +1,93 @@
+<!-- This is the chart javascript -->
+
+<script>
+// initial function to create the bar chart
+
+var drawChart = function (data) {
+
+  var xcoords = data[0];
+  var ycoords = data[1];
+  var sharpe = data[2];
+  
+  console.log(xcoords);
+  
+  var myPlot = 
+  document.getElementById('plotly-div'),
+    dataPlot = [{x:xcoords, y:ycoords, type:'scatter',
+             mode: 'markers',
+             marker:{size:3, color: sharpe, showscale: true,  colorbar: {title: 'Sharpe Ratio'}}
+            }],
+    layout = {hovermode:'closest',
+              title:'Click on Points'
+     };
+  
+  layout = {
+            title: 'Markowitz\'s Efficient Frontier and Portfolios',
+            xaxis: {title: 'Volatility'},
+            yaxis: {title: 'Expected Returns'},            
+  };
+  
+  Plotly.newPlot('plotly-div', {
+    data: dataPlot,
+    layout: layout
+  });
+  
+  myPlot.on('plotly_click', function(){
+    alert('You clicked this Plotly chart!');
+  });
+  
+  document.getElementById("refresh").onclick = function(){
+    google.script.run
+          .withSuccessHandler(updateChart)
+          .getChartData();
+  };
+
+};
+
+
+// function to call to update the chart
+var updateChart = function(data) {
+
+//  var xcoords = data[0];
+//  var ycoords = data[1];
+//  var sharpe = data[2];
+//  
+//  console.log(xcoords);
+//  
+//  var myPlot = 
+//  document.getElementById('plotly-div'),
+//    dataPlot = [{x:xcoords, y:ycoords, type:'scatter',
+//             mode: 'markers',
+//             marker:{size:3, color: sharpe, showscale: true,  colorbar: {title: 'Sharpe Ratio'}}
+//            }],
+//    layout = {hovermode:'closest',
+//              title:'Click on Points'
+//     };
+//  
+//  layout = {
+//            title: 'Markowitz\'s Efficient Frontier and Portfolios',
+//            xaxis: {title: 'Volatility'},
+//            yaxis: {title: 'Expected Returns'},            
+//  };
+//  
+//  Plotly.newPlot('plotly-div', {
+//    data: dataPlot,
+//    layout: layout
+//  });
+
+  var xcoords = data[0];
+  var ycoords = data[1];
+  var sharpe = data[2];
+  
+  var update = {
+    'x': [xcoords],
+    'y': [ycoords],
+    'marker.color': [sharpe]
+  };
+  
+  Plotly.restyle('plotly-div', update);
+  
+};
+
+
+</script>
